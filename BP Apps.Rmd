@@ -1,29 +1,60 @@
 ---
+output:
+  pdf_document: default
+  html_document: default
+---
+
+---
 title: "Border Patrol Apprehensions Hit 17-year Low"
 author: "Nicole Mis, Seung Lee"
 date: "February 16, 2018"
 output: pdf_document
-fontsize: 11pt
 
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+&nbsp;
+
 # I. Introduction
 
 According to CNN, Apprehensions at the US-Mexico border reached historic lows in April of 2017. This downward trend has been interpreted as a sign that President Trump's anti-immigrant sentiment has deterred many from attempting to cross the border. The total amount of apprehensions at the Southwest border was 11,129, which is the lowest it has been in 17 years. The lowest monthly total before Trump took office was in December of 2011 when there were 18,983 apprehensions. it is particularly noteworthy that drops in apprenehsions occured in February and March because these two months had not seen decreases since 2000. April, on the other hand, has experienced more fluctuations, sometimes decreasing and sometimes increasing apprehensions.
 
 
+&nbsp;
+
+&nbsp;
+
+
 # II. Analysis
 
+Data provided by the U.S. Border Patrol for every month during the years 2010 and 2017 was used to analyze how Border Apprehensions have changed over time. These graphs illustrate that although border apprehensions vary greatly by sector, the overall trend is a decline in border apprehensions along the U.S. southwest border. The bar graph and time series graphs below demonstrate these trends. Although this trend is evident, the cause of the decline is up for debate. There is speculation that Trump's aggressive rhetoric is partly causing the decline in border apprehensions. Along with the bar graphs and time series graph, the t-tests also shed some light on the trends in border apprehensions. The t-tests ultimately provide evidence that there were changes in mean border apprehension rates for certain sectors and months.  
 
-Data provided by the U.S. Border Patrol for the years 2010 and 2017 was used to analyze how Border Apprehensions have changed over time. These graphs illustrate that although border apprehensions vary greatly by sector, the overall trend is a decline in border apprehensions along the U.S. southwest border.  
+
+&nbsp;
+
+&nbsp;
 
 
-## $$Bar Graphs for 2010 and 2017$$
+## A. Bar Graphs for 2010 and 2017
 
-We begin our visualization of this trend with two barplots- one for 2010 and one for 2017. These barplots show how many border apprehensions there were for each sector in each year. Our graphs below demonstrate that the number of apprehensions greatly vary by sector, and the sector that had the highest number of border apprehensions differed between 2010 and 2017.  
+We begin our visualization of this trend with two barplots- one for 2010 and one for 2017. These barplots show how many border apprehensions there were for each sector in each year. Our graphs below demonstrate that the number of apprehensions greatly vary by sector, and the sector that had the highest number of border apprehensions differed between 2010 and 2017. Not only did border apprehensions differ by sector, but they also changed dramatically each month. Some months experienced continuous declines in border apprehensions while others saw fluctuations.  
+
+&nbsp;
+
+
+
+### i. 2010 Sector Bar Graph
+
+The bar graph below for 2010 clearly demonstrates that Tucson had the most total border apprehensions during 2010. Many of the other sectors experienced far less border apprehensions.
+
+&nbsp;
+
+&nbsp;
+
+&nbsp;
+
 
 ```{r echo=FALSE, results='hide',message=FALSE, fig.align='center'}
 # Read in data
@@ -87,9 +118,11 @@ barplot(A2010[1:9,13],
 
 \newpage
 
+### ii. 2017 Sector Bar Graph
 
+For 2017, the sector with the most border apprehensions was Rio Grande Valley. Again, this sector experienced far more border apprehensions than the other sectors during 2017.
 
-```{r echo=FALSE, results='hide',message=FALSE}
+```{r echo=FALSE, results='hide',message=FALSE, fig.align='center'}
 # Barplot for 2017 Border Apprehensions data 
 par(omi=c(0.6, 0, 0, 0))
 barplot(A2017[1:9,13], 
@@ -102,12 +135,22 @@ barplot(A2017[1:9,13],
 
 ```
 
+\newpage
 
-## Comparing Sectors and Months using Double Bar Graphs
+## B. Comparing Sectors and Months using Double Bar Graphs
 
 Below are two double bar graphs that compare the total amount of border apprehensions for 2010 and 2017 by sector and by month. These graphs show that the amount of border apprehension in 2010 was far greater than in 2017.
 
-```{r echo=FALSE, results='hide',message=FALSE}
+&nbsp;
+
+
+### i. Border Apprehensions 2010 vs. 2017 by Month
+
+Below is a double bar graph that compares appprehensions for each month during 2010 and 2017. During October, November, and December, there were more border apprehensions during 2017 but during the spring months, there were far more border apprehensions in 2010. These spikes in border apprehensions ultimately cause 2010 to have more overall border apprehensions.
+
+&nbsp;
+
+```{r echo=FALSE, results='hide',message=FALSE, fig.align='center'}
 # Extract monthly totals from 2017 and 2010 data sets
 newtab <- A2017[10,1:12]
 newtab2 <-A2010[10,1:12]
@@ -127,7 +170,6 @@ par(mgp=c(3.3, 1, 0))
 barplot(as.matrix(finaltab[1:2, 1:12]), 
         main="Border Patrol Apprehensions Along the U.S. Border by Month",
         xlab="Month", col=c("blue","red"),
-        pos=0.7,
         ylab= "Number of BP Apprehensions",
         beside = TRUE, 
         las=2,
@@ -138,9 +180,12 @@ barplot(as.matrix(finaltab[1:2, 1:12]),
 (legend(x=27, y=55000, legend=c("2010", "2017"), fill= c("blue", "red"), cex=0.9, text.width=3))
 
 ```
+ \newpage
 
+### ii. Border Apprehensions by Sector
+Most sectors have comparable rates of border apprehensions for 2010 and 2017 except for a few sectors such as Rio Grande Valley, San Diego, and Tucson. These sectors have far more border apprehensions in one of the two years. Tucson in particular makes up about half of the border apprehensions for 2010.
 
-```{r echo=FALSE, results='hide',message=FALSE}
+```{r echo=FALSE, results='hide',message=FALSE, fig.align='center'}
 # Don't use scientific notation
 options(scipen=999)
 
@@ -170,23 +215,42 @@ legend(x=20, y= 410000, legend= c("2010", "2017"), fill = c("darkblue", "red"), 
 
 ```
 
+\newpage
 
-## Time Series
+## C. Time Series
+
+The graph below contains data on monthly border apprehensions along the U.S. Southwest border for every year between 2000 and 2017. The overall trend of this graph shows that border apprehensions have been declining since 2000.
+
+```{r echo=FALSE, results='hide',message=FALSE, fig.align='center'}
+
+A2000.2017 <- read.csv("monthly_sum.csv", header = TRUE, stringsAsFactors = FALSE)
+
+# use monthly summary
+# copy the data from the screen w/o year and month
+
+ts1 <- as.matrix(A2000.2017[1:18, 2:13])
+ts2 <- as.vector(t(ts1))
+
+ts3 <- rev(ts2)
+
+ts4 <- ts(ts3, start = c(2000,10), frequency=12)
+
+ts.plot(ts4, gpars=list(xlab="year", ylab="Apprehensions", lty=c(1:3), main= "Border Patrol Apprehensions 2000 to 2017"))
+
+```
 
 
-
-
-## Statistical Analysis: T-Tests
+## III. Statistical Analysis: T-Tests
 
 After visualizing our data, we next look at the t tests that will compare the average amount of border apprehensions in certain sectors and months. The t-test will determine if the two averages are different from each other. The t-test will also tell us how significant the differences are, therby telling us whether these differences could have happened by chance. 
 
 
-## T-test to Compare Tucson Sector 
+## A. T-test to Compare Tucson Sector 
 
 Tucson had the highest number of border apprehensions in 2010 of all the sectors. Therefore, a t-test was conducted below which determined that since the p-value is drastically lower than the 5% significance level, we can reject the null and conclude that Tucson's mean number of border apprehensions in 2010 is statistically different than in 2017.
 
 
-```{r echo=FALSE, results='hide',message=FALSE}
+```{r echo=FALSE,message=FALSE}
 
 ## Generate paired t-test to compare BP apprehensions for Tucson
 t.test(as.numeric(A2010[8, 1:12]), as.numeric(A2017[8, 1:12]), paired=TRUE)
@@ -194,36 +258,33 @@ t.test(as.numeric(A2010[8, 1:12]), as.numeric(A2017[8, 1:12]), paired=TRUE)
 
 
 
-## T-test to Compare Rio Grande Valley
+## B. T-test to Compare Rio Grande Valley
 
 In 2017, Rio Grande Valley sector had the highest number of border apprehensions of all the sectors. Thus, we conducted a t-test to determine if its mean number of border apprehensions differed between the two years. Our results below show that at the 5% significance level, we can reject the null hypothesis and conclude that the Rio Grande Valley does have different means in 2010 and 2017, meaning that this sector could have greatly influenced how many total border apprehensions were in each month. However, it is worthwhile to note that at the 1% significance level, we would fail to reject the null since the p-value is not less than 1%. Therefore, these results are less significant than the results for Tucson.
 
 
-```{r echo=FALSE, results='hide',message=FALSE}
+```{r echo=FALSE, message=FALSE}
 ## Generate paired t-test to compare BP apprehensions for Rio Grande 
 t.test(as.numeric(A2010[6, 1:12]), as.numeric(A2017[6, 1:12]), paired=TRUE)
 
 ```
 
-## T-test to Compare Three-Month Period with Highest Apprehensions in 2010
+## C. T-test to Compare Three-Month Period with Highest Apprehensions in 2010
 
 Below we conducted another paired t-test to compare the three month period in 2010 with the highest number of apprehensions which were the months of March, April and May to the number of apprehensions during these months in 2017. Since the p-value is less than the significance level, we can reject the null hypothesis and conclude that the mean number of border apprehensions in these months are statistically different between 2010 and 2017.Therefore, the increase in border apprehensions in 2010 is significantly different than the border apprehensions for the same months in 2017. 
 
 
-```{r echo=FALSE, results='hide',message=FALSE}
+```{r echo=FALSE ,message=FALSE}
 ## T-test for March, April, and May of 2010
 
 t.test(as.numeric(A2010[10, 6:8]), as.numeric(A2017[10, 6:8]), paired=TRUE)
 ```
 
-## T-test to Compare Three-Month Period with Highest Apprehensions in 2017
+## D. T-test to Compare Three-Month Period with Highest Apprehensions in 2017
 We conducted the same test as above, except this time using data from October, November and December of 2010 and 2017 because this is the three-month period in 2017 with the highest number of border apprehensions. Since the p-value is greater than the 5% significance level, we fail to reject the null hypothesis and conclude that the mean number of border apprehensions during this three month period in 2010 and 2017 are not statistically different.
 
-```{r echo=FALSE, out.width='100%'}
-knitr::include_graphics('./cropped-banner_efpt.jpg')
-```
 
-```{r echo=FALSE, results='hide', message=FALSE}
+```{r echo=FALSE, message=FALSE}
 
 ## T-test for October, November, and December of 2017
 

@@ -1,0 +1,235 @@
+---
+title: "Border Patrol Apprehensions Hit 17-year Low"
+author: "Nicole Mis, Seung Lee"
+date: "February 16, 2018"
+output: pdf_document
+fontsize: 11pt
+
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# I. Introduction
+
+According to CNN, Apprehensions at the US-Mexico border reached historic lows in April of 2017. This downward trend has been interpreted as a sign that President Trump's anti-immigrant sentiment has deterred many from attempting to cross the border. The total amount of apprehensions at the Southwest border was 11,129, which is the lowest it has been in 17 years. The lowest monthly total before Trump took office was in December of 2011 when there were 18,983 apprehensions. it is particularly noteworthy that drops in apprenehsions occured in February and March because these two months had not seen decreases since 2000. April, on the other hand, has experienced more fluctuations, sometimes decreasing and sometimes increasing apprehensions.
+
+
+# II. Analysis
+
+
+Data provided by the U.S. Border Patrol for the years 2010 and 2017 was used to analyze how Border Apprehensions have changed over time. These graphs illustrate that although border apprehensions vary greatly by sector, the overall trend is a decline in border apprehensions along the U.S. southwest border.  
+
+
+## $$Bar Graphs for 2010 and 2017$$
+
+We begin our visualization of this trend with two barplots- one for 2010 and one for 2017. These barplots show how many border apprehensions there were for each sector in each year. Our graphs below demonstrate that the number of apprehensions greatly vary by sector, and the sector that had the highest number of border apprehensions differed between 2010 and 2017.  
+
+```{r echo=FALSE, results='hide',message=FALSE, fig.align='center'}
+# Read in data
+A2010 <- read.csv( "BP Apprehensions 2010.csv" , header = TRUE, stringsAsFactors = FALSE)
+A2017 <- read.csv("PB Apprehensions 2017.csv", header = TRUE, stringsAsFactors = FALSE)
+
+## Use strings in Col 1 as row names
+rownames(A2010) <- A2010[,1]
+
+## Drop column 1
+A2010 <-  subset(A2010, select= -c(Sector))
+
+## rbind ColSums to dataframe
+A2010 <- rbind(A2010, colSums(A2010))
+
+## rbind assigns a rowname -- drop this name
+-length(rownames(A2010))  
+
+## rename the row with column totals "Total"
+rownames(A2010) <- c(rownames(A2010)[-length(rownames(A2010))], "Total")
+
+## cbind rowSums to dataframd
+A2010 <- cbind(A2010,rowSums(A2010))
+
+## rename last column "Totals
+colnames(A2010) <- c(colnames(A2010)[-length(colnames(A2010))], "Total")
+
+####################################################################################
+
+## Use strings in Col 1 as row names
+rownames(A2017) <- A2017[,1]
+
+## Drop column 1
+A2017 <-  subset(A2017, select= -c(Sector))
+
+## rbind ColSums to dataframe
+A2017 <- rbind(A2017, colSums(A2017))
+
+## rbind assigns a rowname -- drop this name
+-length(rownames(A2017))  
+
+## rename the row with column totals "Total"
+rownames(A2017) <- c(rownames(A2017)[-length(rownames(A2017))], "Total")
+
+## cbind rowSums to dataframd
+A2017 <- cbind(A2017,rowSums(A2017))
+
+## rename last column "Totals
+colnames(A2017) <- c(colnames(A2017)[-length(colnames(A2017))], "Total")
+
+# Barplot for 2010 Border Apprehensions data 
+par(omi=c(0.6, 0, 0, 0))
+barplot(A2010[1:9,13], 
+        names.arg = rownames(A2010)[1:9], 
+        las=2,
+        axisnames=TRUE,
+        main="2010 Border Patrol Apprehensions by Sector",
+        border="red",
+        col="red")
+```
+
+\newpage
+
+
+
+```{r echo=FALSE, results='hide',message=FALSE}
+# Barplot for 2017 Border Apprehensions data 
+par(omi=c(0.6, 0, 0, 0))
+barplot(A2017[1:9,13], 
+        names.arg = rownames(A2017)[1:9], 
+        las=2,
+        axisnames=TRUE,
+        main="2017 Border Patrol Apprehensions by Sector",
+        border="blue",
+        col="blue")
+
+```
+
+
+## Comparing Sectors and Months using Double Bar Graphs
+
+Below are two double bar graphs that compare the total amount of border apprehensions for 2010 and 2017 by sector and by month. These graphs show that the amount of border apprehension in 2010 was far greater than in 2017.
+
+```{r echo=FALSE, results='hide',message=FALSE}
+# Extract monthly totals from 2017 and 2010 data sets
+newtab <- A2017[10,1:12]
+newtab2 <-A2010[10,1:12]
+
+# Create new matrix with monthly totals
+finaltab <- rbind(newtab2, newtab)
+as.matrix(finaltab[1:2, 1:12])
+
+# Set margin spacing
+par(omi=c(0.1, 0.3, 0, 0))
+
+# Set spacing between labels and axis
+par(mgp=c(3.3, 1, 0))
+
+
+# Plot double bar graph for border apprehensions by month
+barplot(as.matrix(finaltab[1:2, 1:12]), 
+        main="Border Patrol Apprehensions Along the U.S. Border by Month",
+        xlab="Month", col=c("blue","red"),
+        pos=0.7,
+        ylab= "Number of BP Apprehensions",
+        beside = TRUE, 
+        las=2,
+        axisnames=TRUE)
+
+# Create legend for years
+
+(legend(x=27, y=55000, legend=c("2010", "2017"), fill= c("blue", "red"), cex=0.9, text.width=3))
+
+```
+
+
+```{r echo=FALSE, results='hide',message=FALSE}
+# Don't use scientific notation
+options(scipen=999)
+
+# Extract sector totals of apprehensions for 2017 and 2010 and make a matrix
+sectot17 <- A2017[1:10, 13]
+sectot10 <- A2010[1:10, 13]
+finsect <- rbind(sectot10, sectot17)
+
+# Set margin spacing 
+par(omi=c(0.8, 0.20, 0, 0))
+
+# Set spacing between labels and axis
+par(mgp=c(3.3, 0.5, 0))
+
+# Graph total apprehensions for each sector in 2017 and 2010
+barplot(finsect, main="Border Patrol Apprehensions by Sector",
+        names.arg = rownames(A2017)[1:10],
+        las=2,
+        axisnames=TRUE,
+        xlab="Sectors     ", col=c("darkblue","red"),
+        ylab= "BP Apprehensions",
+        beside = TRUE)
+
+# Create legend for years
+legend(x=20, y= 410000, legend= c("2010", "2017"), fill = c("darkblue", "red"), cex=0.7, text.width=2)
+
+
+```
+
+
+## Time Series
+
+
+
+
+## Statistical Analysis: T-Tests
+
+After visualizing our data, we next look at the t tests that will compare the average amount of border apprehensions in certain sectors and months. The t-test will determine if the two averages are different from each other. The t-test will also tell us how significant the differences are, therby telling us whether these differences could have happened by chance. 
+
+
+## T-test to Compare Tucson Sector 
+
+Tucson had the highest number of border apprehensions in 2010 of all the sectors. Therefore, a t-test was conducted below which determined that since the p-value is drastically lower than the 5% significance level, we can reject the null and conclude that Tucson's mean number of border apprehensions in 2010 is statistically different than in 2017.
+
+
+```{r echo=FALSE, results='hide',message=FALSE}
+
+## Generate paired t-test to compare BP apprehensions for Tucson
+t.test(as.numeric(A2010[8, 1:12]), as.numeric(A2017[8, 1:12]), paired=TRUE)
+```
+
+
+
+## T-test to Compare Rio Grande Valley
+
+In 2017, Rio Grande Valley sector had the highest number of border apprehensions of all the sectors. Thus, we conducted a t-test to determine if its mean number of border apprehensions differed between the two years. Our results below show that at the 5% significance level, we can reject the null hypothesis and conclude that the Rio Grande Valley does have different means in 2010 and 2017, meaning that this sector could have greatly influenced how many total border apprehensions were in each month. However, it is worthwhile to note that at the 1% significance level, we would fail to reject the null since the p-value is not less than 1%. Therefore, these results are less significant than the results for Tucson.
+
+
+```{r echo=FALSE, results='hide',message=FALSE}
+## Generate paired t-test to compare BP apprehensions for Rio Grande 
+t.test(as.numeric(A2010[6, 1:12]), as.numeric(A2017[6, 1:12]), paired=TRUE)
+
+```
+
+## T-test to Compare Three-Month Period with Highest Apprehensions in 2010
+
+Below we conducted another paired t-test to compare the three month period in 2010 with the highest number of apprehensions which were the months of March, April and May to the number of apprehensions during these months in 2017. Since the p-value is less than the significance level, we can reject the null hypothesis and conclude that the mean number of border apprehensions in these months are statistically different between 2010 and 2017.Therefore, the increase in border apprehensions in 2010 is significantly different than the border apprehensions for the same months in 2017. 
+
+
+```{r echo=FALSE, results='hide',message=FALSE}
+## T-test for March, April, and May of 2010
+
+t.test(as.numeric(A2010[10, 6:8]), as.numeric(A2017[10, 6:8]), paired=TRUE)
+```
+
+## T-test to Compare Three-Month Period with Highest Apprehensions in 2017
+We conducted the same test as above, except this time using data from October, November and December of 2010 and 2017 because this is the three-month period in 2017 with the highest number of border apprehensions. Since the p-value is greater than the 5% significance level, we fail to reject the null hypothesis and conclude that the mean number of border apprehensions during this three month period in 2010 and 2017 are not statistically different.
+
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('./cropped-banner_efpt.jpg')
+```
+
+```{r echo=FALSE, results='hide', message=FALSE}
+
+## T-test for October, November, and December of 2017
+
+t.test(as.numeric(A2010[10, 1:3]), as.numeric(A2017[10, 1:3]), paired=TRUE)
+
+```
+
+
+
